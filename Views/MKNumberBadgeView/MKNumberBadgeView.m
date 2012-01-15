@@ -42,7 +42,8 @@
 @synthesize fillColor=_fillColor;
 @synthesize strokeColor=_strokeColor;
 @synthesize textColor=_textColor;
-@synthesize alignment=_alignment;
+@synthesize alignment=_horizontalAlignment;
+@synthesize verticalAlignment=_verticalAlignment;
 @dynamic badgeSize;
 @synthesize pad=_pad;
 
@@ -79,6 +80,7 @@
 	self.shadowOffset = CGSizeMake(0, -3);
 	self.shine = YES;
 	self.alignment = UITextAlignmentCenter;
+	self.verticalAlignment = Middle;
 	self.fillColor = [UIColor redColor];
 	self.strokeColor = [UIColor whiteColor];
 	self.textColor = [UIColor whiteColor];
@@ -131,20 +133,37 @@
 	
 	CGPoint ctm;
 	
+	float x,y;
 	switch (self.alignment) 
 	{
 		default:
 		case UITextAlignmentCenter:
-			ctm = CGPointMake( round((viewBounds.size.width - badgeRect.size.width)/2), round((viewBounds.size.height - badgeRect.size.height)/2) );
+			x = round((viewBounds.size.width - badgeRect.size.width)/2);
 			break;
 		case UITextAlignmentLeft:
-			ctm = CGPointMake( 0, round((viewBounds.size.height - badgeRect.size.height)/2) );
+			x = 0;
 			break;
 		case UITextAlignmentRight:
-			ctm = CGPointMake( (viewBounds.size.width - badgeRect.size.width), round((viewBounds.size.height - badgeRect.size.height)/2) );
+			x = (viewBounds.size.width - badgeRect.size.width);
 			break;
 	}
-	
+
+	switch (self.verticalAlignment) 
+	{
+		default:
+		case Middle:
+			y = round((viewBounds.size.height - badgeRect.size.height)/2);
+			break;
+		case Top:
+			y = 0;
+			break;
+		case Bottom:
+			y = (viewBounds.size.height - badgeRect.size.height);
+			break;
+	}
+
+	ctm = CGPointMake( x, y );
+
 	CGContextTranslateCTM( curContext, ctm.x, ctm.y);
 
 	if (self.shadow)
